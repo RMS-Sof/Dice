@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dice Game</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        .controls, .result {
+            margin: 20px;
+        }
+        .dice {
+            display: flex;
+            gap: 20px;
+            font-size: 50px;
+        }
+        .dice span {
+            display: inline-block;
+            transition: transform 0.5s ease-in-out;
+        }
+        .rolling {
+            animation: roll 0.5s infinite;
+        }
+        @keyframes roll {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        button {
+            margin: 10px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dice Matching Game</h1>
+    <div class="controls">
+        <label for="targetNumber">Choose a number (3-18):</label>
+        <input type="number" id="targetNumber" min="3" max="18" value="3">
+    </div>
+    <button onclick="rollDice()">Roll Dice</button>
+    <div class="dice" id="diceResult">
+        <span>🎲</span> <span>🎲</span> <span>🎲</span>
+    </div>
+    <div class="result" id="resultMessage"></div>
+    <button onclick="exitGame()">Exit</button>
+    
+    <script>
+        function rollDice() {
+            let diceElements = document.querySelectorAll(".dice span");
+            diceElements.forEach(dice => dice.classList.add("rolling"));
+            
+            setTimeout(() => {
+                let dice1 = Math.floor(Math.random() * 6) + 1;
+                let dice2 = Math.floor(Math.random() * 6) + 1;
+                let dice3 = Math.floor(Math.random() * 6) + 1;
+                let total = dice1 + dice2 + dice3;
+                let target = parseInt(document.getElementById("targetNumber").value);
+                
+                document.getElementById("diceResult").innerHTML = `
+                    <span>🎲 ${dice1}</span>
+                    <span>🎲 ${dice2}</span>
+                    <span>🎲 ${dice3}</span>
+                `;
+                diceElements.forEach(dice => dice.classList.remove("rolling"));
+                
+                if (total === target) {
+                    document.getElementById("resultMessage").innerHTML = "You win! 🎉";
+                } else {
+                    document.getElementById("resultMessage").innerHTML = `Try again! (You got ${total})`;
+                }
+            }, 1000);
+        }
+        
+        function exitGame() {
+            alert("Thanks for playing!");
+            window.close();
+        }
+    </script>
+</body>
+</html>
